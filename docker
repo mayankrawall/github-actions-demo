@@ -1,0 +1,15 @@
+database:
+    image: mysql:8.4
+    command: --default-authentication-plugin=mysql_native_password
+     volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psecret"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+backend-1:                    
+    image: skillpulse/go-backend:latest
+    restart: always
+    ports:
+      - "8080:8080"                
