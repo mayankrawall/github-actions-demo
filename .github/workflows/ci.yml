@@ -1,8 +1,6 @@
-name: CI
-
 on:
   push:
-    branches: [main]
+    branches: main
     paths-ignore:
       - 'k8s/**'
       - 'docs/**'
@@ -22,20 +20,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-    - name: - Build and push backend
-    -  uses: docker/build-push-action@v7
-    -  with:
-        context: ./backend
-        push: ${{ vars.DEPLOY_ENABLED == 'true' }}
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-backend:latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-backend:${{ github.run_number }}
+      - name: Build and push backend
+        uses: docker/build-push-action@v7
+        with:
+          context: ./backend
+          push: ${{ vars.DEPLOY_ENABLED == 'true' }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-backend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-backend:${{ github.run_number }}
 
       - name: Build and push frontend
-      uses: docker/build-push-action@v7
-      with:
-        context: ./frontend
-        push: ${{ vars.DEPLOY_ENABLED == 'true' }}
-        tags: |
-          ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-frontend:latest
-          ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-frontend:${{ github.run_number }}
+        uses: docker/build-push-action@v7
+        with:
+          context: ./frontend
+          push: ${{ vars.DEPLOY_ENABLED == 'true' }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-frontend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/skillpulse-frontend:${{ github.run_number }}
