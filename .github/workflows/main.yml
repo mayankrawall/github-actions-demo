@@ -24,4 +24,4 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
-          tags: ***/mr:latest
+          tags: mayankrawall/backend:latest
