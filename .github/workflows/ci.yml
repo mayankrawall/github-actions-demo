@@ -26,7 +26,7 @@ jobs:
       - name: Build and push backend
         uses: docker/build-push-action@v7
         with:
-          context: .
+          context: ./backend
           push: ${{ vars.DEPLOY_ENABLED == 'true' }}
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/skillpulse-backend:latest
