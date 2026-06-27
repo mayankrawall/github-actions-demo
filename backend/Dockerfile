@@ -2,7 +2,7 @@ FROM golang:1.26-alpine
 
 WORKDIR /app
 
-# Absolute paths pointing inside the backend folder
+# Sahi absolute paths (root context ke hisab se)
 COPY backend/go.mod backend/go.sum ./
 RUN go mod download
 
