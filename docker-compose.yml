@@ -2,39 +2,36 @@ version: '3.8'
 
 services:
   backend:
-    image: ${DOCKERHUB_USERNAME}/go-backend:latest
+    image: go-backend:latest
     build: ./backend
+    restart: always
     environment:
       - DB_HOST=database
-      - DB_USER=root
-      - DB_PASSWORD=secret
+      - DB_USER=rootuser
+      - DB_PASSWORD=2002
       - DB_NAME=skillpulse
     depends_on:
-      database:
-        condition: service_healthy
+      - database
 
   frontend:
-    image: ${DOCKERHUB_USERNAME}/nginx-frontend:latest
+    image: nginx-frontend:latest
     build: ./frontend
+    restart: always
     ports:
-      - "80:80"
+      - "8080:80"  
     depends_on:
       - backend
 
   database:
-    image: mysql:8.4
+    image: mysql:8.0
+    restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_ROOT_PASSWORD=2002
       - MYSQL_DATABASE=skillpulse
       - MYSQL_USER=rootuser
-      - MYSQL_password=secret
+      - MYSQL_PASSWORD=2002
     volumes:
       - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psecret"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
 volumes:
   mysql_data:
