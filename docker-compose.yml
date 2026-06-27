@@ -18,7 +18,7 @@ services:
     build: ./frontend
     restart: always
     ports:
-      - "8080:80"  
+      - "8080:80"
     depends_on:
       - backend
 
@@ -32,6 +32,11 @@ services:
       - MYSQL_PASSWORD=2002
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p2002"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mysql_data:
