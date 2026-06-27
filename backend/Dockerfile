@@ -2,11 +2,11 @@ FROM golang:1.26-alpine
 
 WORKDIR /app
 
-# Sahi absolute paths (root context ke hisab se)
-COPY backend/go.mod backend/go.sum ./
+# Bilkul simple paths kyunki hum isi folder ke andar se build chalayenge
+COPY go.mod go.sum ./
 RUN go mod download
 
-COPY backend/ ./
+COPY . ./
 
 RUN go build -o main .
 
