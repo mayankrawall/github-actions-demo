@@ -24,4 +24,4 @@ jobs:
           context: .
           file: ./backend/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/mayankrawall:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/my-backend-app:latest
