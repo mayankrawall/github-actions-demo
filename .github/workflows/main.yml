@@ -18,9 +18,16 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and Push Docker Image
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/mr:latest
+     - name: Build and Push Docker Image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./backend        
+          file: ./backend/Dockerfile 
+          push: true
+          tags: ***/mr:latest
+          
+    
+      
+        
+        
+      
