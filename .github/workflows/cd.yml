@@ -15,8 +15,10 @@ jobs:
       - name: Deploying Directly via Self-Hosted Runner
         run: |
           if [ ! -d "$HOME/skillpulse" ]; then
-            git clone https://github.com/${{ github.repository }} $HOME/skillpulse
+            echo "Directory does not exist. Creating it..."
+            mkdir -p "$HOME/skillpulse"
           fi
+
 
           cd $HOME/skillpulse
           git pull origin main
