@@ -10,25 +10,20 @@ jobs:
   deploy:
     runs-on: self-hosted
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
     steps:
       - name: Deploying Directly via Self-Hosted Runner
         run: |
-          # यदि पहली बार डिप्लॉय कर रहे हैं तो रेपो क्लोन करें
-          if [ ! -d ~/skillpulse ]; then
-            git clone https://github.com/${{ github.repository }} ~/skillpulse
+          if [ ! -d "$HOME/skillpulse" ]; then
+            git clone https://github.com/${{ github.repository }} $HOME/skillpulse
           fi
 
-          cd ~/skillpulse
+          cd $HOME/skillpulse
           git pull origin main
 
-          # .env फाइल चेक (इम्पॉर्टेंट सेटअप के लिए)
           if [ ! -f .env ]; then
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
           fi
 
-          # कंटेनर्स अपडेट और रन करना
           docker-compose pull
           docker-compose up -d --remove-orphans
-
-          # पुरानी और अनयूज्ड इमेजेस को साफ़ करना ताकि डिस्क न भरे
-          docker image prune -f
