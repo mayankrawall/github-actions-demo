@@ -1,3 +1,4 @@
+
 name: CD Workflow
 
 on:
@@ -14,18 +15,11 @@ jobs:
     steps:
       - name: Deploying Directly via Self-Hosted Runner
         run: |
-          if [ ! -d "$HOME/skillpulse" ]; then
-            echo "Directory does not exist. Creating it..."
-            mkdir -p "$HOME/skillpulse"
-          fi
-
-
-          cd $HOME/skillpulse
+          mkdir -p "$HOME/skillpulse"
+          cd "$HOME/skillpulse"
           git pull origin main
-
           if [ ! -f .env ]; then
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
           fi
-
           docker-compose pull
           docker-compose up -d --remove-orphans
