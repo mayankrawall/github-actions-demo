@@ -11,6 +11,9 @@ jobs:
     runs-on: self-hosted
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
+    env:
+      RUNNER_TEMP: /tmp
+
     steps:
       - name: Deploying Directly via Self-Hosted Runner
         run: |
@@ -18,7 +21,7 @@ jobs:
           cd "$HOME/skillpulse"
           git pull origin main
           if [ ! -f .env ]; then
-            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" > .env
+            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }}" > .env
           fi
           docker-compose pull
           docker-compose up -d --remove-orphans
