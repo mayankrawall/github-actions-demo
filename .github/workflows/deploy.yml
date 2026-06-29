@@ -1,27 +1,17 @@
-name: CD Workflow
-
-on:
-  workflow_run:
-    workflows: ["CI Workflow"]
-    types:
-      - completed
-
-jobs:
-  deploy:
-    runs-on: self-hosted
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
-    env:
-      RUNNER_TEMP: /tmp
-
-    steps:
-      - name: Deploying Directly via Self-Hosted Runner
+- name: Deploying Directly via Self-Hosted Runner
         run: |
           mkdir -p "$HOME/skillpulse"
           cd "$HOME/skillpulse"
-          git pull origin main
+
+          
+          if [ ! -d ".git" ]; then
+            git clone https://github.com/mayankrawall/github-actions-demo.git .
+          else
+            git pull origin main
+          fi
+          
           if [ ! -f .env ]; then
-            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKER_USERNAME }}" > .env
+            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
           fi
           docker-compose pull
           docker-compose up -d --remove-orphans
