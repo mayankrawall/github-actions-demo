@@ -1,17 +1,24 @@
-name: Local Deployment
+name: CD Workflow
 
 on:
-  push:
-    branches: [ main ]
+  workflow_run:
+    workflows: ["CI Workflow"]
+    types:
+      - completed
 
 jobs:
   deploy:
     runs-on: self-hosted
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Run Build or Deployment Script
+      - name: Deploying Directly via Self-Hosted Runner
         run: |
-          echo "Deploying directly on my local machine..."
+          mkdir -p "$HOME/skillpulse"
+          cd "$HOME/skillpulse"
+          git pull origin main
+          if [ ! -f .env ]; then
+            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" > .env
+          fi
+          docker-compose pull
+          docker-compose up -d --remove-orphans
