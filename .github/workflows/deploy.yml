@@ -1,21 +1,17 @@
-steps:
-      - name: Deploying Directly via Self-Hosted Runner
+name: Local Deployment
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Build or Deployment Script
         run: |
-          mkdir -p "$HOME/skillpulse"
-          cd "$HOME/skillpulse"
-          
-          # Initialize git if it's a new directory
-          if [ ! -d ".git" ]; then
-            git init
-            git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
-          fi
-          
-          git pull origin main
-          
-          # Create env file
-          if [ ! -f .env ]; then
-            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
-          fi
-          
-          docker-compose pull
-          docker-compose up -d --remove-orphans
+          echo "Deploying directly on my local machine..."
