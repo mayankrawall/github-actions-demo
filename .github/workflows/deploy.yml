@@ -29,7 +29,7 @@ jobs:
 
 
           if [ ! -f .env ]; then
-            echo "DOCKERHUB_USERNAME=${{ secrets.Dockerhub_USERNAME }}" > .env
+            echo "DOCKER_USERNAME=${{ secrets.Docker_USERNAME }}" > .env
           fi
 
 
