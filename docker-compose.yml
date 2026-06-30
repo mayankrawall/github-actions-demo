@@ -3,7 +3,9 @@ version: '3.8'
 services:
   backend:
     image: go-backend:latest
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     restart: always
     environment:
       - DB_HOST=database
@@ -11,11 +13,14 @@ services:
       - DB_PASSWORD=2002
       - DB_NAME=skillpulse
     depends_on:
-      - database
+      database:
+        condition: service_healthy
 
   frontend:
     image: nginx-frontend:latest
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     restart: always
     ports:
       - "8080:80"
@@ -26,10 +31,10 @@ services:
     image: mysql:8.0
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=2002
-      - MYSQL_DATABASE=skillpulse
-      - MYSQL_USER=rootuser
-      - MYSQL_PASSWORD=2002
+      MYSQL_ROOT_PASSWORD: "2002"
+      MYSQL_DATABASE: skillpulse
+      MYSQL_USER: rootuser
+      MYSQL_PASSWORD: "2002"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
