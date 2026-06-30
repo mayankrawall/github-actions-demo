@@ -10,28 +10,17 @@ jobs:
     runs-on: self-hosted
 
     steps:
-
-      - name: Checkout Repository
+      - name: Checkout Source Code
         uses: actions/checkout@v4
 
-
-      - name: Setup and Deploy
+      - name: Deploying Directly via Self-Hosted Runner
         run: |
+          
+          
           mkdir -p "$HOME/skillpulse"
+          cp -r . "$HOME/skillpulse/"
           cd "$HOME/skillpulse"
-
-
-          if [ ! -d ".git" ]; then
-            git clone https://github.com/mayankrawall/github-actions-demo.git .
-          else
-            git pull origin main
-          fi
-
-
-          if [ ! -f .env ]; then
-            echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
-          fi
-
-
-          docker compose pull
-          docker compose up -d - --build
+          
+          
+          docker compose down
+          docker compose up -d --build
