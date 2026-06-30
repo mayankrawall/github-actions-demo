@@ -33,10 +33,11 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p2002"]
-      interval: 5s
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$2002"]
+      interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
 
 volumes:
   mysql_data:
