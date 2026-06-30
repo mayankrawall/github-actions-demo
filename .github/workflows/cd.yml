@@ -20,5 +20,5 @@ jobs:
           if [ ! -f .env ]; then
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
           fi
-          docker compose pull
+          
           docker compose up -d --build
