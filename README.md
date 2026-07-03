@@ -302,7 +302,7 @@ The new CD path doesn't `kubectl apply` from GitHub Actions — your kind cluste
 ```
 git push to main
     ↓
-CI: build images, push trainwithshubham/skillpulse-{backend,frontend}:{latest,<sha>}
+CI: build images, push mayankrawall/skillpulse-{backend,frontend}:{latest,<sha>}
     ↓
 cd-k8s.yml: sed image: lines in k8s/20-backend.yaml + k8s/30-frontend.yaml
             commit "deploy: pin backend+frontend to <short-sha>" to main as github-actions[bot]
