@@ -1,1 +1,0 @@
-# my devsecops & cloud project
