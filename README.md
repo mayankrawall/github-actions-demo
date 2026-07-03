@@ -1,8 +1,9 @@
-# SkillPulse — GitHub Actions & Kubernetes Masterclass
-
+# SkillPulse-DevSecOps-Pipeline
+# 
+# 
 A small, real application with a real CI/CD pipeline. The app — SkillPulse — lets you track skills you're learning and the hours you put in. The point isn't the app. The point is everything around it: how a single `git push` becomes a running update on a server in under two minutes, with no human pressing any button.
 
-This repo is the working demo for the **TrainWithShubham GitHub Actions & Kubernetes Masterclass**.
+SkillPulse is a multi-tier application configured with a robust, automated CI/CD pipeline to demonstrate production-ready DevOps and deployment practices."
 
 > **New here? Two beginner-friendly companion guides:**
 >
@@ -200,11 +201,11 @@ make down                        # deletes the cluster (and the MySQL data with 
 What `make up` actually runs, in order:
 
 ```bash
-docker build -t trainwithshubham/skillpulse-backend:latest  ./backend
-docker build -t trainwithshubham/skillpulse-frontend:latest ./frontend
+docker build -t mayankrawall/skillpulse-backend:latest  ./backend
+docker build -t mayankrawall/skillpulse-frontend:latest ./frontend
 kind create cluster --config k8s/kind-config.yaml --name skillpulse
-kind load docker-image trainwithshubham/skillpulse-backend:latest  --name skillpulse
-kind load docker-image trainwithshubham/skillpulse-frontend:latest --name skillpulse
+kind load docker-image mayankrawall/skillpulse-backend:latest  --name skillpulse
+kind load docker-image mayankrawall/skillpulse-frontend:latest --name skillpulse
 kubectl apply -f k8s/00-namespace.yaml \
               -f k8s/10-mysql.yaml \
               -f k8s/20-backend.yaml \
@@ -388,6 +389,9 @@ Same app. Same pipeline shape. Different runtime — and a lot more power.
 
 ---
 
-## Credits
+## Acknowledgments & Credits
 
-Built for the [TrainWithShubham](https://www.youtube.com/@TrainWithShubham) community. If this repo helped you understand a real CI/CD pipeline end to end, share it forward — that's how the community grows.
+* **Project Concept & Base Architecture:** Inspired by the *TrainWithShubham GitHub Actions & Kubernetes Masterclass*. 
+* **Implementation & Deployment:** Fully configured, deployed, and debugged by me. This includes setting up the multi-tier Docker containers, writing Kubernetes manifests, configuring GitHub Actions workflows, and managing the AWS infrastructure.
+
+
