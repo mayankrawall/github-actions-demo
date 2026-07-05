@@ -1,50 +1,8 @@
 # SkillPulse-DevSecOps-Pipeline
-# 
-# 
-A small, real application with a real CI/CD pipeline. The app — SkillPulse — lets you track skills you're learning and the hours you put in. The point isn't the app. The point is everything around it: how a single `git push` becomes a running update on a server in under two minutes, with no human pressing any button.
 
 SkillPulse is a multi-tier application configured with a robust, automated CI/CD pipeline to demonstrate production-ready DevOps and deployment practices."
 
-> **New here? Two beginner-friendly companion guides:**
->
-> -
-
----
-
-## Why DevOps matters
-
-For most of software's history, the people who *wrote* software and the people who *ran* it were two different teams with two different goals.
-
-- Developers wanted to ship features.
-- Operations wanted stability.
-
-The fastest way for ops to be stable was to slow developers down. The fastest way for developers to ship was to throw code over the wall. Both teams were right. Both teams were also miserable. And the customer paid the price — releases happened once a quarter, every release was scary, and bugs took weeks to fix.
-
-DevOps is the cultural and technical answer to that: *the same team owns the change all the way to production, and tooling makes that safe.* It's not a job title. It's a way of working that says small, frequent, automated, and reversible beats big, rare, manual, and irreversible — every time.
-
-When DevOps is working you can tell because:
-
-- **Deploys are boring.** Friday afternoon, Monday morning, doesn't matter.
-- **Rollbacks are cheap.** A bad deploy is a 30-second fix, not an incident.
-- **Feedback is fast.** A broken commit fails CI in minutes, not "after QA next sprint."
-- **Ownership is clear.** The person who wrote the code is the person who watches it ship.
-
-You get there by automating the path from a developer's laptop to production. That automation is called a **pipeline**.
-
----
-
-## Why CI/CD is the heart of DevOps
-
-CI/CD is two ideas wearing one acronym.
-
-- **Continuous Integration** — every change, from every developer, gets built and tested automatically the moment it lands. You catch breakage in minutes, not days. Merge conflicts shrink because nobody's branch lives for two weeks.
-- **Continuous Delivery / Deployment** — every change that passes CI is automatically packaged and shipped — to staging, or all the way to production. There is no "deploy day." Every commit is a candidate release.
-
-The reason this matters: the cost of fixing a bug grows with the time between writing it and finding it. CI/CD shortens that gap to minutes. The reason it's hard: the only way to make it work is to *automate everything*. Build, test, package, deploy, verify. No "just run this script on my laptop" steps. If a human has to remember it, it will eventually be forgotten — and then it will fail at 2 a.m.
-
----
-
-Why GitHub Actions (with Self-Hosted Runners)
+---Why GitHub Actions (with Self-Hosted Runners)
 A pipeline needs a runner — something that watches your repo, executes your build/test/deploy steps, and reports back. While GitHub provides hosted runners, managing your own self-hosted runner gives you full control over the execution environment, hardware specs, and security compliance without the overhead of maintaining a separate CI/CD platform like Jenkins.
 
 GitHub Actions with self-hosted runners wins on three things:
