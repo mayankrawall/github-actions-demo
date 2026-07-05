@@ -44,17 +44,25 @@ The reason this matters: the cost of fixing a bug grows with the time between wr
 
 ---
 
-## Why GitHub Actions
+Why GitHub Actions (with Self-Hosted Runners)
+A pipeline needs a runner — something that watches your repo, executes your build/test/deploy steps, and reports back. While GitHub provides hosted runners, managing your own self-hosted runner gives you full control over the execution environment, hardware specs, and security compliance without the overhead of maintaining a separate CI/CD platform like Jenkins.
 
-A pipeline needs a runner — something that watches your repo, executes your build/test/deploy steps, and reports back. Historically that meant standing up a Jenkins server, paying for CircleCI, or wiring something custom. All of those still work; none of them are the lowest-friction option in 2026.
+GitHub Actions with self-hosted runners wins on three things:
 
-GitHub Actions wins on three things:
+It lives where the code lives. No separate UI or complex third-party auth. Your .github/workflows/*.yml files are part of the repo — they evolve with the code, get reviewed in the same PRs, and survive every clone.
 
-1. **It lives where the code lives.** No separate server, no separate auth, no separate UI. Your `.github/workflows/*.yml` files are part of the repo — they evolve with the code, get reviewed in the same PRs, and survive every clone.
-2. **It's free for public repos and generous for private ones.** A complete CI/CD pipeline costs zero rupees to start.
-3. **The Marketplace is enormous.** Need to SSH into a server? `appleboy/ssh-action`. Need to log in to Docker Hub? `docker/login-action`. You compose pre-built blocks instead of writing bash from scratch.
+Complete environment & cost control. You choose the hardware (on-premise servers, cloud VMs, or local machines) and pre-install heavy dependencies. You don't pay GitHub for compute time, making it highly cost-effective for resource-intensive or long-running builds.
 
-The trade-off is GitHub lock-in. For most teams, that's a fair price for the integration.
+Secure & private network access. Because the runner sits inside your own infrastructure (AWS VPC, local network, etc.), it can securely deploy to internal servers and databases without exposing them to the public internet.
+
+The trade-off is infrastructure management. You are responsible for the runner's uptime, security updates, and scaling. For most teams needing high performance or strict compliance, that's a fair price for total control.
+
+Key modifications made:
+Shifted the focus from "zero friction/free tier" to infrastructure control, cost efficiency for heavy workloads, and security.
+
+Highlighted the main benefit of self-hosted runners: running pipelines inside your own secure network/VPC.
+
+Updated the trade-off section to acknowledge the responsibility of managing your own infrastructure.
 
 ---
 
