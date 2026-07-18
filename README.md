@@ -203,112 +203,105 @@ http://localhost:8888
    Deployment frontend (nginx + static)  — runs on whichever worker the scheduler picks
         │ proxy_pass http://backend:8080  (same hostname as docker-compose)
         ▼
-   Service backend (ClusterIP 8080)
-        │
-        ▼
-   Deployment backend (Go + Gin)
-        │ DB_HOST=mysql
-        ▼
-   Service mysql (Headless 3306)
-        │
-        ▼
-   StatefulSet mysql + 1Gi PVC + ConfigMap-mounted init.sql
-```
+   Service backend (ClusterIP 8080)it no-ops and exits 0. That's the loop-protection working.
+📸 Deployment Walkthrough
+🚀 Step 01 – Clone the Repository
 
-### Manifest layout
+🎯 Objective
 
-```
-k8s/
-  kind-config.yaml      cluster shape: 1 control-plane + 2 workers, host 8888 → node 30080
-  00-namespace.yaml     namespace: skillpulse
-  10-mysql.yaml         Secret + ConfigMap (init.sql) + headless Service + StatefulSet + 1Gi PVC
-  20-backend.yaml       Deployment + ClusterIP Service, env from Secret, /health probes
-  30-frontend.yaml      Deployment + NodePort Service (30080), / probes
-```
+Clone the SkillPulse project to your local machine.
 
-### Useful commands
+Command Used
+Explanation
+Downloads the complete project.
+Preserves Git history.
+Moves into the project directory.
+Screenshot
+Verify
 
-| Command | What it does |
-|---|---|
-| `make status` | One-screen view of pods, services, endpoints |
-| `make logs` | Tail all three workloads at once |
-| `make mysql` | Open a `mysql` shell in the StatefulSet pod |
-| `make restart` | Roll backend + frontend (e.g. after pushing a new image) |
+Expected
 
-### Smoke test
+🚀 Step 02 – Local Development using Docker Compose
+Objective
 
-```bash
-curl http://localhost:8888/health                 # → {"status":"healthy"}
-curl http://localhost:8888/api/dashboard          # → seed-data counters
-curl -s http://localhost:8888/ | grep '<title>'   # → HTML title containing "SkillPulse"
-```
+Run the complete application locally before Kubernetes deployment.
 
-### Gotchas worth knowing
+Command
+Explanation
 
-- **Docker Desktop must be running.** `docker build`, `kind`, and `kubectl` all talk to the Docker daemon on your machine.
-- **First boot is slow.** The local-path provisioner has to materialise the PVC before MySQL starts. Expect 10–30s of `Pending` on `make up`'s first run.
-- **Host port collision.** If something else owns 8888 on the host, the cluster comes up but `curl localhost:8888` fails. Free the port — or change `hostPort` in `k8s/kind-config.yaml` and re-run `make down && make up`.
-- **No Docker Hub round-trip in this chapter.** Images are built locally and pushed into the kind node via `kind load`. Useful when you're iterating on code: `make restart` rebuilds + reloads + rolls without ever touching Docker Hub. (Production EKS/GKE clusters do pull from a registry — that's the next chapter.)
+This command:
 
-### What's next
+Builds frontend image
+Builds backend image
+Creates MySQL container
+Starts all services
+Verify
 
-This is the **kind chapter** — same app, real Kubernetes primitives, but limited to one local node and `NodePort` access. The next chapter graduates the same workload to:
+Expected
 
-- An **Ingress** controller (nginx-ingress) so traffic enters via `Ingress` rules instead of NodePort.
-- **Helm or Kustomize** so the manifests stop being copy-pasted between environments.
-- A real **cloud cluster** (EKS / GKE / AKS) and CD that runs `kubectl apply` from the pipeline instead of `appleboy/ssh-action`.
+Screenshot
+Troubleshooting
 
----
+If containers stop immediately:
 
-## Continuous deployment to the kind cluster
+🚀 Step 03 – Verify Local Application
+Verify Frontend
+Verify Backend
+Screenshot
+🚀 Step 04 – Docker Image Build
+Command
+Explanation
 
-The new CD path doesn't `kubectl apply` from GitHub Actions — your kind cluster lives on your laptop, GitHub can't reach it. Instead, the pipeline takes the GitOps shape: **the repo is the source of truth, your cluster is one `git pull && make apply` away**.
+Creates production-ready Docker images.
 
-```
-git push to main
-    ↓
-CI: build images, push mayankrawall/skillpulse-{backend,frontend}:{latest,<sha>}
-    ↓
-cd-k8s.yml: sed image: lines in k8s/20-backend.yaml + k8s/30-frontend.yaml
-            commit "deploy: pin backend+frontend to <short-sha>" to main as github-actions[bot]
-    ↓
-(you, locally):
-    git pull && make apply
-    ↓
-kind nodes pull the new :<sha> from Docker Hub → rolling update
-```
+Verify
 
-### How to wire it up on your fork
+Expected
 
-1. **Fork this repo + clone locally.** `make up` should work after that (see the [Run on Kubernetes (kind)](#run-on-kubernetes-kind) section).
-2. **Add two secrets** to your fork (`Settings → Secrets and variables → Actions`):
+🚀 Step 05 – Push Images to Docker Hub
+Command
+Screenshot
+Troubleshooting
 
-   | Secret | Value |
-   |---|---|
-   | `DOCKERHUB_USERNAME` | your Docker Hub account name |
-   | `DOCKERHUB_TOKEN` | a Docker Hub Personal Access Token with Read & Write scope |
+If login fails
 
-3. **Set the repo variable** `DEPLOY_ENABLED = "true"` (`Settings → Variables → Actions`). Until this is `true`, CI builds without pushing and both CD workflows skip cleanly — the "dry run" state.
-4. **Push any code change** (not a `.md`, not under `k8s/` or `docs/` — those are deliberately ignored by CI). Watch the Actions tab:
-   - **CI** builds + pushes both images to Docker Hub.
-   - **CD (kind cluster — manifest bump)** commits a `deploy: pin backend+frontend to <sha>` change to main.
-5. **Pull and deploy**, on the laptop with the kind cluster:
-   ```bash
-   git pull
-   make apply
-   kubectl get pods -n skillpulse -o wide
-   ```
-   You'll see new pods with the bumped image rolling out. mysql untouched.
+🚀 Step 06 – Create Kind Cluster
+Command
+Verify
 
-### What about the EC2 path?
+Expected
 
-The previous chapter's `cd.yml` is still in the repo — it SSHes into an EC2 and runs `docker compose up`. It's gated on the same `DEPLOY_ENABLED` variable plus three EC2 secrets (`EC2_HOST`, `EC2_USER`, `EC2_SSH_KEY`). Skip those secrets and `cd.yml` will fail loudly when `DEPLOY_ENABLED=true`; that's expected — it's the previous chapter's deploy target, kept around as the masterclass artifact.
+🚀 Step 07 – Create Namespace
+Command
+Verify
 
-### Break it on purpose to learn
+Expected
 
-- **Push a commit that fails to build** → both CD workflows are *skipped*, not failed (the `if: success()` gate).
-- **Rotate the Docker Hub token** → next CI fails at the login step. You'll learn what an expired credential looks like in logs.
-- **Edit `k8s/20-backend.yaml`'s image tag by hand and push** → CI is *skipped* (paths-ignore), `cd-k8s.yml` does fire but the manifest is already pinned, so it no-ops and exits 0. That's the loop-protection working.
+🚀 Step 08 – Deploy MySQL
+Command
+Explanation
+
+Deploys:
+
+MySQL Deployment
+MySQL Service
+Verify
+
+Expected
+
+Troubleshooting
+🚀 Step 09 – Deploy Backend
+Command
+Verify
+
+Expected
+
+Check Logs
+🚀 Step 10 – Create Backend Service
+Command
+Verify
+
+Expected
 
 ---
 
@@ -348,9 +341,7 @@ The Kubernetes half of the course evolves this same app onto a cluster:
 - Replace `docker compose` with manifests (Deployment, Service, Ingress).
 - Replace SSH-driven deploys with `kubectl apply` from CI, then with GitOps (Argo CD / Flux).
 - Add health checks, autoscaling, rolling updates with no downtime, secrets via Kubernetes Secrets or external managers.
-- Run the cluster on EKS / GKE / AKS or local (kind / minikube).
-
-Same app. Same pipeline shape. Different runtime — and a lot more power.
+- Run the cluster o
 
 ---
 
