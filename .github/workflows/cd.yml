@@ -12,7 +12,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      # Git pull ki jagah ye official step lagayein jo automatic auth handle karega
+      
       - name: Checkout Code
         uses: actions/checkout@v4
 
@@ -20,7 +20,7 @@ jobs:
         run: |
           mkdir -p "$HOME/skillpulse"
           
-          # Pure folder ko fresh sync karne ke liye (bina git pull ke jhanjhat ke)
+          
           rsync -avz --exclude '.git' ./ "$HOME/skillpulse/"
           
           cd "$HOME/skillpulse"
@@ -28,5 +28,6 @@ jobs:
             echo "DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}" > .env
           fi
           
-          docker compose down
+          docker compose down --remove-orphans --volumes
+          docker rm -f $(docker ps -aq) || true
           docker compose up -d --build
