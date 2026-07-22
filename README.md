@@ -2,7 +2,7 @@
 
 A production-style three-tier skill-tracking application demonstrating Docker, GitHub Actions, a self-hosted runner, Kubernetes, KinD, Nginx, Go, and MySQL.
 
-![SkillPulse Dashboard](docs/screenshots/app-dashboard-data.png)
+
 
 ## Project Overview
 
@@ -494,7 +494,7 @@ kubectl rollout restart deployment/backend deployment/frontend -n skillpulse
 ```
 
 Use `imagePullPolicy: IfNotPresent` for images loaded directly into KinD.
-
+![SkillPulse Dashboard](docs/screenshots/app-dashboard-data.png)
 ## Useful Operational Commands
 
 ```bash
