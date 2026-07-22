@@ -240,8 +240,8 @@ sudo ./svc.sh status
 Fix deployment-directory permissions when required:
 
 ```bash
-sudo chown -R "$USER:$USER" "$HOME/skillpulse"
-sudo chmod -R 755 "$HOME/skillpulse"
+sudo chown -R mr:mr /HOME/mr/skillpulse/
+sudo chmod -R 755 /HOME/mr/skillpulse/
 ```
 
 Example CD workflow:
@@ -405,7 +405,7 @@ Inside Kubernetes, the backend can also be addressed through its fully qualified
 backend.skillpulse.svc.cluster.local:8080
 ```
 
-![Nginx Configuration](docs/screenshots/nginx-config.png)
+![Nginx Configuration](docs/screenshots/nginix-config.png)
 
 ## Troubleshooting Guide
 
