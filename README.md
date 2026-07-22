@@ -1,5 +1,5 @@
 # SkillPulse — End-to-End DevOps CI/CD Project
-![end to end](docs/screenshots/endtoend.png)
+![SkillPulse Dashboard](docs/screenshots/app-dashboard-data.png)
 
 A production-style three-tier skill-tracking application demonstrating Docker, GitHub Actions, a self-hosted runner, Kubernetes, KinD, Nginx, Go, and MySQL.
 
