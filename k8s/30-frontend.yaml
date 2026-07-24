@@ -31,6 +31,10 @@ spec:
       labels:
         app: frontend
     spec:
+      hostAliases:
+      - ip: "10.96.71.153"
+        hostnames:
+        - "10.96.183.41"
       containers:
         - name: frontend
           image: trainwithshubham/skillpulse-frontend:latest
