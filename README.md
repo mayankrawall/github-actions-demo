@@ -1,131 +1,597 @@
-<p align="center">🚀 SkillPulse – End-to-End DevOps CI/CD Pipeline on Kubernetes</p>
-<p align="center"> Production-Ready Multi-Tier Application with GitHub Actions, Docker, Kubernetes (Kind), AWS EC2, Self-Hosted Runner & MySQL </p> <p align="center">
-📖 Project Overview
-🎯 Project Summary
+# SkillPulse — End-to-End DevOps CI/CD Project
+![project](docs/screenshots/end-to-end.png)
 
-SkillPulse is a production-inspired three-tier web application that demonstrates a complete DevOps CI/CD pipeline using modern cloud-native technologies. The project automates the entire software delivery lifecycle—from source code management to containerization and Kubernetes deployment—using GitHub Actions and a Self-Hosted Runner.
+A production-style three-tier skill-tracking application demonstrating Docker, GitHub Actions, a self-hosted runner, Kubernetes, KinD, Nginx, Go, and MySQL.
 
-The application consists of an Nginx Frontend, a Go Backend API, and a MySQL Database, all deployed on a Kind Kubernetes Cluster running on an AWS EC2 instance. Docker is used for containerization, Docker Hub serves as the container registry, and Kubernetes manages application orchestration.
 
-This project emphasizes automation, scalability, reliability, and production-ready deployment practices, making it an ideal portfolio project for DevOps and Cloud Engineers.
-Solution Architecture
-<p align="center"> <img src="assets/diagrams/solution-architecture.png" width="100%"> </p>
-🏗️ Architecture Overview
 
-The deployment workflow follows this architecture:
+## Project Overview
 
-Developer
-     │
-     ▼
-GitHub Repository
-     │
-     ▼
-GitHub Actions
-     │
-     ▼
-Self-Hosted Runner (AWS EC2)
-     │
-     ▼
-Docker Build
-     │
-     ▼
-Docker Hub
-     │
-     ▼
-Kind Kubernetes Cluster
-     │
-     ▼
-Namespace (skillpulse)
-     │
-     ▼
-MySQL Database
-     │
-     ▼
-Go Backend API
-     │
-     ▼
-Nginx Frontend
-     │
-     ▼
-Web Browser
-🔄 End-to-End CI/CD Workflow
-<p align="center"> <img src="assets/diagrams/cicd-workflow.png" width="100%"> </p>
-📂 Repository Structure
-skillpulse-devops/
-│
-├── .github/
-│   └── workflows/
-│       └── ci.yml                  # GitHub Actions CI/CD Pipeline
-│
-├── backend/                        # Go Backend Source Code
-│   ├── main.go
-│   ├── go.mod
-│   ├── go.sum
-│   └── Dockerfile
-│
-├── frontend/                       # Nginx Frontend
-│   ├── index.html
-│   ├── nginx.conf
-│   └── Dockerfile
-│
-├── kubernetes/
-│   ├── 00-namespace.yaml           # Namespace
-│   ├── 10-mysql.yaml               # MySQL Deployment & Service
-│   ├── 20-backend.yaml             # Backend Deployment
-│   ├── 30-frontend.yaml            # Frontend Deployment
-│   └── backend-service.yaml        # Backend Service
-│
-├── assets/
-│   ├── banner/
-│   │   └── banner.svg
-│   │
-│   ├── diagrams/
-│   │   ├── solution-architecture.png
-│   │   └── cicd-workflow.png
-│   │
-│   └── screenshots/
-│       ├── step-01-clone-repository.png
-│       ├── step-02-docker-compose.png
-│       ├── ...
-│       └── step-20-final-pipeline.png
-│
-├── docker-compose.yml              # Local Development
-├── kind-config.yaml                # Kind Cluster Configuration
-├── README.md                       # Project Documentation
-├── LICENSE
-├── CONTRIBUTING.md
-└── CHANGELOG.md
-📁 Folder Description
-Folder/File	Description
-.github/workflows/ci.yml	GitHub Actions workflow for CI/CD automation
-backend/	Go backend application source code
-frontend/	Nginx frontend application
-kubernetes/	Kubernetes manifests for namespace, MySQL, backend, frontend, and services
-assets/screenshots/	Deployment screenshots used in the README
-assets/diagrams/	Architecture and CI/CD workflow diagrams
-docker-compose.yml	Local multi-container development environment
-kind-config.yaml	Kind Kubernetes cluster configuration
-README.md	Complete project documentation
-⚙️ Technology Stack
-Category	Technologies
-Programming Language	Go
-Frontend	HTML, CSS, JavaScript, Nginx
-Database	MySQL
-Containerization	Docker
-Container Registry	Docker Hub
-CI/CD	GitHub Actions
-Runner	Self-Hosted Runner
-Orchestration	Kubernetes (Kind)
-Cloud Platform	AWS EC2
-Version Control	Git & GitHub
-Operating System	Ubuntu (Linux)
+SkillPulse allows users to add technical skills, log learning sessions, set goals, and track progress. The project demonstrates the complete software delivery lifecycle: development, containerization, CI image builds, automated deployment, Kubernetes orchestration, validation, and troubleshooting.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  Dev[Developer] -->|git push| GitHub[GitHub Repository]
+  GitHub --> CI[GitHub Actions CI]
+  CI --> Registry[(Docker Hub)]
+  CI --> CD[GitHub Actions CD]
+  CD --> Runner[Self-Hosted Linux Runner]
+  Runner --> Compose[Docker Compose]
+  Registry --> Kind[KinD Kubernetes Cluster]
+  Kind --> Frontend[Nginx Frontend]
+  Frontend -->|/api| Backend[Go Backend :8080]
+  Backend --> MySQL[(MySQL :3306)]
+  User[Browser] --> Frontend
+```
+
+## Technology Stack
+
+| Component | Technology |
+|---|---|
+| Frontend | HTML/CSS/JavaScript served by Nginx |
+| Backend | Go REST API |
+| Database | MySQL 8 |
+| Containerization | Docker and Docker Compose |
+| CI/CD | GitHub Actions |
+| Deployment runner | Self-hosted Linux runner |
+| Orchestration | Kubernetes on KinD |
+| Registry | Docker Hub |
+
+## Repository Structure
+
+```text
+skillpulse/
+├── .github/workflows/
+│   ├── ci.yml
+│   ├── cd.yml
+│   ├── deploy.yml
+│   └── cd-k8s.yml
+├── backend/
+├── frontend/
+│   ├── Dockerfile
+│   └── nginx.conf
+├── mysql/
+├── k8s/
+│   ├── 00-namespace.yaml
+│   ├── 10-mysql.yaml
+│   ├── 20-backend.yaml
+│   ├── 30-frontend.yaml
+│   ├── backend-service.yaml
+│   ├── docker-compose.yml
+│   └── kind-config.yaml
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+├── Makefile
+└── README.md
+```
+
+## Prerequisites
+
+```bash
+git --version
+docker --version
+docker compose version
+kubectl version --client
+kind version
+```
+
+## Environment Setup
+
+```bash
+cp .env.example .env
+nano .env
+```
+
+```env
+DB_HOST=database
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=change-me
+DB_NAME=skillpulse
+DOCKERHUB_USERNAME=your-dockerhub-username
+```
+
+Never commit credentials. Confirm that `.env` is ignored:
+
+```bash
+git check-ignore -v .env
+git status
+```
+
+## Local Deployment with Docker Compose
+
+### Build and start
+
+```bash
+docker compose up -d --build
+```
+
+This builds the frontend and backend images, starts MySQL, waits for its health check, and starts the complete stack.
+
+![Docker Compose Configuration](docs/screenshots/docker-compose.png)
+
+### Verify services
+
+```bash
+docker compose ps
+docker ps
+```
+
+Expected services:
+
+```text
+database   mysql:8.0             healthy
+backend    skillpulse-backend    running
+frontend   skillpulse-frontend   running
+```
+
+### Check logs
+
+```bash
+docker compose logs -f database
+docker compose logs -f backend
+docker compose logs -f frontend
+```
+
+Open the application:
+
+```text
+http://localhost:8080
+```
+
+![Application Running](docs/screenshots/app-dashboard.png)
+
+### Stop or reset
+
+```bash
+docker compose down
+```
+
+```bash
+docker compose down --remove-orphans --volumes
+docker rm -f $(docker ps -aq) 2>/dev/null || true
+docker compose up -d --build
+```
+
+## GitHub Actions CI
+
+The CI workflow runs on pushes to `main` and performs these stages:
+
+```text
+Checkout → Docker Buildx → Docker Hub Login → Build Backend → Build Frontend → Push Images
+```
+
+Recommended tags:
+
+```text
+<username>/skillpulse-backend:latest
+<username>/skillpulse-backend:<run-number>
+<username>/skillpulse-frontend:latest
+<username>/skillpulse-frontend:<run-number>
+```
+
+```yaml
+name: CI Workflow
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'k8s/**'
+      - 'docs/**'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/skillpulse-backend:latest
+            ${{ secrets.DOCKER_USERNAME }}/skillpulse-backend:${{ github.run_number }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/skillpulse-frontend:latest
+            ${{ secrets.DOCKER_USERNAME }}/skillpulse-frontend:${{ github.run_number }}
+```
+
+![CI Workflow](docs/screenshots/ci-workflow.png)
+
+Required repository secrets:
+
+| Secret | Purpose |
+|---|---|
+| `DOCKER_USERNAME` | Docker Hub username |
+| `DOCKER_PASSWORD` | Docker Hub access token |
+| `DEPLOY_ENABLED` | Optional deployment feature flag |
+
+## CD with a Self-Hosted Runner
+
+Register the runner from **Repository Settings → Actions → Runners** and use GitHub's generated installation commands.
+
+Start it interactively:
+
+```bash
+cd actions-runner
+./run.sh
+```
+
+Install it as a service:
+
+```bash
+sudo ./svc.sh install
+sudo ./svc.sh start
+sudo ./svc.sh status
+```
+
+Fix deployment-directory permissions when required:
+
+```bash
+sudo chown -R mr:mr /HOME/mr/skillpulse/
+sudo chmod -R 755 /HOME/mr/skillpulse/
+```
+
+Example CD workflow:
+
+```yaml
+name: CD Workflow
+
+on:
+  workflow_run:
+    workflows: ["CI Workflow"]
+    types: [completed]
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy via self-hosted runner
+        run: |
+          mkdir -p "$HOME/skillpulse"
+          rsync -avz --exclude '.git' ./ "$HOME/skillpulse/"
+          cd "$HOME/skillpulse"
+          docker compose down --remove-orphans --volumes
+          docker rm -f $(docker ps -aq) 2>/dev/null || true
+          docker compose up -d --build
+```
+
+![CD Workflow](docs/screenshots/cd-workflow.png)
+
+Successful output:
+
+```text
+Connected to GitHub
+Listening for Jobs
+Running job: deploy
+Job deploy completed with result: Succeeded
+```
+
+![Runner Success](docs/screenshots/runner-success.png)
+
+## Kubernetes Deployment with KinD
+
+### Manifest order
+
+| File | Purpose |
+|---|---|
+| `00-namespace.yaml` | Creates the `skillpulse` namespace |
+| `10-mysql.yaml` | MySQL Secret/ConfigMap, Service, and StatefulSet |
+| `20-backend.yaml` | Backend Deployment and Service |
+| `30-frontend.yaml` | Frontend Deployment and NodePort Service |
+| `backend-service.yaml` | Separate backend Service definition when used |
+| `kind-config.yaml` | KinD cluster configuration |
+| `docker-compose.yml` | Local deployment file; do not apply with kubectl |
+
+### Create the cluster
+
+```bash
+kind create cluster --name skillpulse --config k8s/kind-config.yaml
+kubectl cluster-info --context kind-skillpulse
+kubectl get nodes
+```
+
+![KinD Cluster](docs/screenshots/kind-cluster.png)
+
+### Build and load local images
+
+```bash
+docker build -t your-user/skillpulse-backend:latest ./backend
+docker build -t your-user/skillpulse-frontend:latest ./frontend
+kind load docker-image your-user/skillpulse-backend:latest --name skillpulse
+kind load docker-image your-user/skillpulse-frontend:latest --name skillpulse
+```
+
+![Loading Images into KinD](docs/screenshots/kind-image-load.png)
+
+### Apply manifests
+
+```bash
+kubectl apply -f k8s/00-namespace.yaml
+kubectl apply -f k8s/10-mysql.yaml
+kubectl apply -f k8s/20-backend.yaml
+kubectl apply -f k8s/30-frontend.yaml
+```
+
+Or apply the Kubernetes manifests while excluding non-Kubernetes files:
+
+```bash
+kubectl apply -f k8s/00-namespace.yaml \
+  -f k8s/10-mysql.yaml \
+  -f k8s/20-backend.yaml \
+  -f k8s/30-frontend.yaml
+```
+
+![Backend Manifest](docs/screenshots/backend-manifest.png)
+
+![Frontend Manifest](docs/screenshots/frontend-manifest.png)
+
+### Verify resources
+
+```bash
+kubectl get all -n skillpulse
+kubectl get pods -n skillpulse -o wide
+kubectl get svc -n skillpulse
+kubectl rollout status deployment/backend -n skillpulse
+kubectl rollout status deployment/frontend -n skillpulse
+```
+
+![Kubernetes Resources](docs/screenshots/k8s-resources.png)
+
+### Access the application
+
+Frontend port-forward:
+
+```bash
+kubectl port-forward svc/frontend 3000:80 -n skillpulse --address 0.0.0.0
+```
+
+Open:
+
+```text
+http://localhost:3000
+```
+
+Backend port-forward for API testing:
+
+```bash
+kubectl port-forward svc/backend 8081:8080 -n skillpulse --address 0.0.0.0
+```
+
+![Frontend Port Forward](docs/screenshots/port-forward.png)
+
+## Nginx Reverse Proxy
+
+The frontend serves static files and proxies API requests to the backend Kubernetes Service.
+
+```nginx
+server {
+    listen 80;
+    server_name localhost;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /api/ {
+        proxy_pass http://backend:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+Inside Kubernetes, the backend can also be addressed through its fully qualified service name:
+
+```text
+backend.skillpulse.svc.cluster.local:8080
+```
+
+![Nginx Configuration](docs/screenshots/nginix-config.png)
+
+## Troubleshooting Guide
+
+### Namespace not found
+
+```text
+namespaces "skillpulse" not found
+```
+
+Fix:
+
+```bash
+kubectl apply -f k8s/00-namespace.yaml
+kubectl apply -f k8s/10-mysql.yaml
+kubectl apply -f k8s/20-backend.yaml
+kubectl apply -f k8s/30-frontend.yaml
+```
+
+### Invalid files passed to kubectl
+
+`docker-compose.yml` and `kind-config.yaml` are not application manifests. Applying the entire directory may produce errors such as `apiVersion not set` or `no matches for kind Cluster`.
+
+Use explicit manifest files instead of:
+
+```bash
+kubectl apply -f k8s/
+```
+
+### Port already in use
+
+```text
+Unable to listen on port 8080: address already in use
+```
+
+Find the process:
+
+```bash
+sudo lsof -i :8080
+sudo ss -ltnp | grep :8080
+```
+
+Use another host port:
+
+```bash
+kubectl port-forward svc/backend 8081:8080 -n skillpulse
+```
+
+### Backend CrashLoopBackOff
+
+```bash
+kubectl get pods -n skillpulse
+kubectl describe pod <backend-pod> -n skillpulse
+kubectl logs deployment/backend -n skillpulse --tail=100
+kubectl logs <backend-pod> -n skillpulse --previous
+```
+
+### MySQL access denied
+
+```text
+Error 1045 (28000): Access denied for user
+```
+
+Confirm that MySQL and backend use matching credentials:
+
+```bash
+kubectl get secret -n skillpulse
+kubectl describe deployment backend -n skillpulse
+kubectl logs statefulset/mysql -n skillpulse
+```
+
+After correcting configuration:
+
+```bash
+kubectl rollout restart deployment/backend -n skillpulse
+kubectl rollout status deployment/backend -n skillpulse
+```
+
+![Troubleshooting and Recovery](docs/screenshots/troubleshooting.png)
+
+### ImagePullBackOff with local images
+
+```bash
+kind load docker-image your-user/skillpulse-backend:latest --name skillpulse
+kind load docker-image your-user/skillpulse-frontend:latest --name skillpulse
+kubectl rollout restart deployment/backend deployment/frontend -n skillpulse
+```
+
+Use `imagePullPolicy: IfNotPresent` for images loaded directly into KinD.
+![SkillPulse Dashboard](docs/screenshots/app-dashboard-data.png)
+## Useful Operational Commands
+
+```bash
+kubectl get events -n skillpulse --sort-by=.metadata.creationTimestamp
+kubectl top pods -n skillpulse
+kubectl exec -it mysql-0 -n skillpulse -- mysql -uroot -p
+kubectl exec -it deployment/backend -n skillpulse -- sh
+kubectl rollout restart deployment/backend -n skillpulse
+kubectl rollout restart deployment/frontend -n skillpulse
+```
+
+## Security Improvements for Production
+
+- Store credentials in GitHub Secrets and Kubernetes Secrets.
+- Use Docker Hub access tokens instead of account passwords.
+- Pin container image versions instead of relying only on `latest`.
+- Run containers as non-root users.
+- Configure resource requests and limits.
+- Add readiness and liveness probes.
+- Use persistent volumes and a backup plan for MySQL.
+- Place HTTPS ingress or a cloud load balancer in front of the application.
+- Add vulnerability scanning and dependency checks to CI.
+- Replace local KinD with a managed cluster for production workloads.
+
+## Cleanup
+
+```bash
+kubectl delete namespace skillpulse
+kind delete cluster --name skillpulse
+docker compose down --remove-orphans --volumes
+```
+
+## Project Highlights for Resume
+
+> Built and automated a three-tier application using Go, Nginx, MySQL, Docker, GitHub Actions, a self-hosted runner, and Kubernetes on KinD. Implemented container image CI, automated CD, Kubernetes service discovery, environment configuration, health checks, and systematic troubleshooting of port conflicts, image loading, CrashLoopBackOff, and database authentication failures.
+
+## Author
+
+**Mayank Rawal**  
+DevOps & Cloud Engineering Learner
+
+---
+
+⭐ Star the repository if this project helps you understand a real end-to-end DevOps workflow.
 
 
 ---
 
-## Acknowledgments & Credits
+# 📸 Additional Implementation Screenshots
 
-* **Project Concept & Base Architecture:** Inspired by the *TrainWithShubham GitHub Actions & Kubernetes Masterclass*. 
-* **Implementation & Deployment:** Fully configured, deployed, and debugged by me. This includes setting up the multi-tier Docker containers, writing Kubernetes manifests, configuring GitHub Actions workflows, and managing the AWS infrastructure.
+## Docker Compose Configuration
+![Docker Compose](docs/screenshots/docker-compose-config.png)
 
+This screenshot demonstrates the production-ready `docker-compose.yml` configuration containing the **Go Backend**, **Nginx Frontend**, and **MySQL Database** services with health checks, restart policies, environment variables, and port mappings.
 
+---
+
+## Database Initialization
+
+![Database Import](docs/screenshots/mysql-init.png)
+
+The MySQL schema was imported successfully using `init.sql`, and the required tables were verified.
+
+---
+
+## GitHub Actions Workflow
+
+![GitHub Actions](docs/screenshots/github-actions-workflow.png)
+
+The CI workflow automatically builds and pushes Docker images after every push to the `main` branch.
+
+---
+
+## Docker Logs & Container Verification
+
+![Container Logs](docs/screenshots/docker-logs.png)
+
+Container logs were verified to ensure all services were healthy and communicating correctly.
+
+---
+
+## Networking Verification
+
+![Network](docs/screenshots/network-verification.png)
+
+Verified container networking and exposed application IP for testing.
+
+---
+
+## Troubleshooting
+
+During development the following issues were resolved:
+
+- Incorrect Docker build context.
+- MySQL authentication errors.
+- Database initialization failures.
+- Docker Compose warnings.
+- Container startup dependency issues.
+- Image build validation.
