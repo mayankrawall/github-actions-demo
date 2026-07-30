@@ -107,6 +107,7 @@ git status
 
 ```bash
 docker compose up -d --build
+docker compose up -d
 ```
 
 This builds the frontend and backend images, starts MySQL, waits for its health check, and starts the complete stack.
@@ -154,6 +155,7 @@ docker compose down
 docker compose down --remove-orphans --volumes
 docker rm -f $(docker ps -aq) 2>/dev/null || true
 docker compose up -d --build
+docker compose up -d
 ```
 
 ## GitHub Actions CI
@@ -595,3 +597,4 @@ During development the following issues were resolved:
 - Docker Compose warnings.
 - Container startup dependency issues.
 - Image build validation.
+- Note:For a detailed explanation of the project setup, execution logs, and step-by-step troubleshooting guide, please refer to the documentation available in the `docs` folder:
