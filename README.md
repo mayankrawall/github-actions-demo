@@ -504,6 +504,8 @@ kubectl rollout restart deployment/backend deployment/frontend -n skillpulse
 ```
 
 Use `imagePullPolicy: IfNotPresent` for images loaded directly into KinD.
+
+
 ![SkillPulse Dashboard](docs/screenshots/app-dashboard-data.png)
 ## Useful Operational Commands
 
