@@ -1,3 +1,8 @@
+<h1 align="center">
+  <a href="YOUR_VIDEO_URL">
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=35&pause=1000&color=FF0055&center=true&vCenter=true&width=435&lines=%E2%96%B6+VIDEO+DEMO;%F0%9F%8E%A5+WATCH+WALKTHROUGH" alt="Video Demo" />
+  </a>
+</h1>
 [![Product Walkthrough](https://placehold.co/1280x720/f8fafc/0f172a/png?text=▶+Watch+Product+Walkthrough)](https://github.com/user-attachments/assets/85e532e2-7726-4176-a974-e602d2c81910)
 
 # SkillPulse — End-to-End DevOps CI/CD Project
