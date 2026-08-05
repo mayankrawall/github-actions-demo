@@ -1,3 +1,5 @@
+https://github.com/user-attachments/assets/3ef2759a-7f02-4c4c-a1c3-5c114cd629a9
+
 # SkillPulse — End-to-End DevOps CI/CD Project
 ![project](docs/screenshots/end-to-end.png)
 
