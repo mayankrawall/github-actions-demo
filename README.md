@@ -1,5 +1,4 @@
-[![Watch Video Demo](https://placehold.co/1280x720/1e293b/ffffff/png?text=▶+Click+to+Watch+Video+Demo)
-https://github.com/user-attachments/assets/3ef2759a-7f02-4c4c-a1c3-5c114cd629a9
+[![Watch Video Demo](https://placehold.co/1280x720/1e293b/ffffff/png?text=▶+Click+to+Watch+Video+Demo)]([![Watch Video Demo](https://github.com/user-attachments/assets/3ef2759a-7f02-4c4c-a1c3-5c114cd629a)
 
 # SkillPulse — End-to-End DevOps CI/CD Project
 ![project](docs/screenshots/end-to-end.png)
