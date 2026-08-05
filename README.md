@@ -1,3 +1,10 @@
+<h1 align="center">
+  <a href="YOUR_VIDEO_URL">
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=35&pause=1000&color=FF0055&center=true&vCenter=true&width=435&lines=%E2%96%B6+VIDEO+DEMO;%F0%9F%8E%A5+WATCH+WALKTHROUGH" alt="Video Demo" />
+  </a>
+</h1>
+https://github.com/user-attachments/assets/281cf589-9323-47ed-a256-33e69b773da7
+
 # SkillPulse — End-to-End DevOps CI/CD Project
 ![project](docs/screenshots/end-to-end.png)
 
@@ -107,6 +114,7 @@ git status
 
 ```bash
 docker compose up -d --build
+docker compose up -d
 ```
 
 This builds the frontend and backend images, starts MySQL, waits for its health check, and starts the complete stack.
@@ -154,6 +162,7 @@ docker compose down
 docker compose down --remove-orphans --volumes
 docker rm -f $(docker ps -aq) 2>/dev/null || true
 docker compose up -d --build
+docker compose up -d
 ```
 
 ## GitHub Actions CI
@@ -595,3 +604,4 @@ During development the following issues were resolved:
 - Docker Compose warnings.
 - Container startup dependency issues.
 - Image build validation.
+- Note:For a detailed explanation of the project setup, execution logs, and step-by-step troubleshooting guide, please refer to the documentation available in the `docs` folder:
