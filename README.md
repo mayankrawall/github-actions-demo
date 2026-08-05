@@ -3,8 +3,7 @@
     <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=35&pause=1000&color=FF0055&center=true&vCenter=true&width=435&lines=%E2%96%B6+VIDEO+DEMO;%F0%9F%8E%A5+WATCH+WALKTHROUGH" alt="Video Demo" />
   </a>
 </h1>
-https://github.com/user-attachments/assets/0681db2c-07fb-474c-9192-ead871816c6f
-
+https://github.com/user-attachments/assets/281cf589-9323-47ed-a256-33e69b773da7
 
 # SkillPulse — End-to-End DevOps CI/CD Project
 ![project](docs/screenshots/end-to-end.png)
