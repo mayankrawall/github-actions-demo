@@ -29,6 +29,7 @@ services:
 
   database:
     image: mysql:8.0
+    container_name: skillpulse-database-1
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: "2002"
